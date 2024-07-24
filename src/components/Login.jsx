@@ -10,8 +10,7 @@ function Login() {
 
       const googleAuth = async () => {
         try {
-          window.location.href = 'http://localhost:3000/auth/google';
-          
+          window.location.href = await 'http://localhost:3000/auth/google';
         } catch (e) {
           console.log(e);
         }
