@@ -34,6 +34,7 @@ function AddAssignment2() {
     hours: '',
     minutes: '',
     seconds: '',
+    deadline: '',
     inputFields: [{ value: '', score: '' }]
   });
 
@@ -103,8 +104,8 @@ function AddAssignment2() {
             Create Assignment
           </div>
           <form onSubmit={handleSubmit} className="w-full max-w-2xl bg-gray-100 p-6 rounded-lg shadow-md">
-            <div className="mb-4 flex justify-between">
-              <div>
+            <div className="mb-4 flex flex-col md:flex-row justify-between">
+              <div className="w-full md:w-1/2 mb-4 md:mb-0">
                 <label htmlFor="group" className="block text-gray-700">Group:</label>
                 <select
                   name="group"
@@ -112,7 +113,7 @@ function AddAssignment2() {
                   required
                   value={formData.group}
                   onChange={handleChange}
-                  className="m-2 text-center border-2 border-black h-10 min-w-40"
+                  className="m-2 text-center border-2 border-black h-10 w-2/3"
                 >
                   <option value="" disabled>Select the group</option>
                   <option value="A">A</option>
@@ -120,16 +121,17 @@ function AddAssignment2() {
                   <option value="C">C</option>
                 </select>
               </div>
-              <div>
+              <div className="w-full md:w-1/2">
                 <label className="block text-gray-700">Time limit:</label>
-                <div className="flex items-center">
+                <div className="flex items-center justify-between">
                   <input
                     type="number"
                     required
                     name="hours"
+                    maxLength={1}
                     value={formData.hours}
                     onChange={handleChange}
-                    className="m-2 text-center border-2 border-black h-10 w-16"
+                    className="m-2 text-center border-2 border-black h-10 w-full md:w-16"
                     placeholder="HH"
                   />
                   <span>:</span>
@@ -139,7 +141,7 @@ function AddAssignment2() {
                     required
                     value={formData.minutes}
                     onChange={handleChange}
-                    className="m-2 text-center border-2 border-black h-10 w-16"
+                    className="m-2 text-center border-2 border-black h-10 w-full md:w-16"
                     placeholder="MM"
                   />
                   <span>:</span>
@@ -149,23 +151,39 @@ function AddAssignment2() {
                     required
                     value={formData.seconds}
                     onChange={handleChange}
-                    className="m-2 text-center border-2 border-black h-10 w-16"
+                    className="m-2 text-center border-2 border-black h-10 w-full md:w-16"
                     placeholder="SS"
                   />
                 </div>
               </div>
             </div>
-            <div className="mb-4">
-              <label htmlFor="title" className="block text-gray-700">Title:</label>
-              <input
-                type="text"
-                name="title"
-                id="title"
-                required
-                value={formData.title}
-                onChange={handleChange}
-                className="w-full p-2 border-2 border-gray-300 rounded"
-              />
+            <div className="mb-4 flex flex-col md:flex-row justify-between items-center">
+              <div className="w-full md:w-1/2 mb-4 md:mb-0">
+                <label htmlFor="title" className="block text-gray-700">Title:</label>
+                <input
+                  type="text"
+                  name="title"
+                  id="title"
+                  
+                  required
+                  value={formData.title}
+                  onChange={handleChange}
+                  className="w-full p-2 border-2 border-gray-300 rounded"
+                />
+              </div>
+              <div className="w-full md:w-1/2 ml-3">
+                <label htmlFor="deadline" className="block text-gray-700">Deadline:</label>
+                <input
+                  type="date"
+                  name="deadline"
+                  id="deadline"
+                  required
+                  value={formData.deadline}
+                  onChange={handleChange}
+                  className="w-2/4
+                   p-2 border-2 border-gray-300 rounded"
+                />
+              </div>
             </div>
             <div className="mb-4">
               <label htmlFor="description" className="block text-gray-700">Description:</label>
@@ -180,7 +198,7 @@ function AddAssignment2() {
             </div>
             <div id="questions" className="mb-4 border-4 p-10 border-gray-300 rounded-lg flex flex-col items-center overflow-auto max-h-96 w-full">
               {inputFields.map((field, index) => (
-                <div key={index} className="w-full flex items-center mb-2">
+                <div key={index} className="w-full flex flex-col md:flex-row items-center mb-2">
                   <input
                     type="text"
                     name="value"
@@ -188,7 +206,7 @@ function AddAssignment2() {
                     value={field.value}
                     onChange={(event) => handleInputChange(index, event)}
                     placeholder="Enter question"
-                    className="flex-grow p-2 border-2 border-gray-300 rounded mr-2"
+                    className="w-full md:flex-grow p-2 border-2 border-gray-300 rounded mb-2 md:mb-0 md:mr-2"
                   />
                   <input
                     type="number"
@@ -197,9 +215,9 @@ function AddAssignment2() {
                     value={field.score}
                     onChange={(event) => handleInputChange(index, event)}
                     placeholder="Score"
-                    className="w-24 p-2 border-2 border-gray-300 rounded mr-2"
+                    className="w-full md:w-24 p-2 border-2 border-gray-300 rounded mb-2 md:mb-0 md:mr-2"
                   />
-                  <button className="border-2 border-black p-1 mr-2" type="button" onClick={() => handleRemoveField(index)}>
+                  <button className="w-full md:w-auto border-2 border-black p-1 mb-2 md:mb-0 md:mr-2" type="button" onClick={() => handleRemoveField(index)}>
                     Remove
                   </button>
                 </div>
@@ -209,9 +227,9 @@ function AddAssignment2() {
               </button>
             </div>
             <div className='flex justify-center items-center'>
-            <button type="submit" className="w-1/4 py-2 mt-4 bg-blue-500 text-white rounded">
-              Submit
-            </button>
+              <button type="submit" className="w-full md:w-1/4 py-2 mt-4 bg-blue-500 text-white rounded">
+                Submit
+              </button>
             </div>
           </form>
         </div>
