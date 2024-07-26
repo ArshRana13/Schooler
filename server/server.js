@@ -120,7 +120,7 @@ passport.use(
       } else if (student.rows[0]) {
         profile.role = 'student';
         profile.group_student = student.rows[0].group_student;
-        let assignments = await db.query('SELECT * from assignments join student on student.group_student  = assignments.group_student where student.group_student = $1',[profile.group_student]);
+        let assignments = await db.query('SELECT * from assignmentss join student on student.group_student  = assignmentss.group_name where student.group_student = $1',[profile.group_student]);
         profile.assignments = assignments.rows;
         console.log(assignments.rows);
         return cb(null,profile)
@@ -151,7 +151,7 @@ wss.on('connection', async (ws) => {
   console.log('WebSocket connection established');
 
   // Fetch initial assignments from the database
-  const result = await db.query('SELECT * FROM assignments');
+  const result = await db.query('SELECT * FROM assignmentss');
   console.log(result.rows);
   const assignments = result.rows;
 

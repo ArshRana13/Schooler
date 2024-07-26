@@ -3,6 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import studentImage from '../../assets/study.png';
 
 function Student() {
+
+    function getQuestions(id)
+    {
+        console.log("assignment id ",id);
+        navigate(`/schooler/student/assignment/${id}`);
+    }
+
+
     const [authenticated, setAuthenticated] = useState(false);
     const [groupStudent, setGroupStudent] = useState('');
     const [assignments, setAssignments] = useState([]);
@@ -59,6 +67,13 @@ function Student() {
         checkAuth();
     }, [navigate]);
 
+    const formatDate = (isoString) => {
+        const date = new Date(isoString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
 
     return (
         <div>
@@ -71,20 +86,19 @@ function Student() {
                         <thead className='bg-gray-50 text-center'>
                             <tr>
                                 <th className='px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider'>Title</th>
-                                <th className='px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider'>Description</th>
-                                <th className='px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider'>Score</th>
+                                <th className='px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider'>Deadline</th>
+                                <th className='px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider'>Duration</th>
                                 <th className='px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider'>Submit</th>
-
                             </tr>
                         </thead>
                         <tbody className='bg-white divide-y divide-gray-200'>
                             {assignments.map((assignment, index) => (
                                 <tr key={index}>
                                     <td className='px-4 py-4 whitespace-nowrap'>{assignment.title}</td>
-                                    <td className='px-4 py-4 whitespace-nowrap'>{assignment.description}</td>
-                                    <td className='px-4 py-4 whitespace-nowrap'>{assignment.score}</td>
+                                    <td className='px-4 py-4 whitespace-nowrap'>{formatDate(assignment.deadline)}</td>
+                                    <td className='px-4 py-4 whitespace-nowrap'>{`${assignment.time_limit_hours}:${assignment.time_limit_minutes}:${assignment.time_limit_seconds}`}</td>
                                     <td className='px-4 py-4 whitespace-nowrap'>
-                                        <button id={assignment.id} className='border-2 border-black p-1 hover:bg-black hover:text-white'>Submit</button>
+                                        <button id={assignment.id} className='border-2 border-black p-2 hover:bg-black hover:text-white' onClick={() => getQuestions(assignment.id)}>Start</button>
                                     </td>
                                 </tr>
                             ))}

@@ -12,6 +12,7 @@ import TeacherNavbar from "./components/Role Components/TeacherNavbar";
 import Teacher from "./components/Roles/Teacher";
 import AddAssignment2 from "./components/Role Components/Teacher/AddAssignment2";
 import Student from "./components/Roles/Student";
+import StartAssignment from "./components/Role Components/Student/StartAssignment";
 
 function App() {
   return (
@@ -27,7 +28,7 @@ function App() {
         <Route path="/schooler/teacher/home" element={<><TeacherNavbar /><Teacher /></>}></Route>
         <Route path="/schooler/teacher/addAssignment" element={<AddAssignment2 />}></Route>
         <Route path="/schooler/student/home" element={<><AdminNavbar /><Student /></>}></Route>
-
+        <Route path="schooler/student/assignment/:id" element={<><AdminNavbar/> <StartAssignment/></>} />
       </Routes>
     </Router>
   );

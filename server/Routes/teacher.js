@@ -29,6 +29,11 @@ router.post('/addAssignment',async (req,res)=>{
       'INSERT INTO assignmentss(group_name,title,description,time_limit_hours,time_limit_minutes,time_limit_seconds,deadline) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id',
        [group,title,description,hours,minutes,seconds,deadline]);
        
+       const result = await db.query('SELECT * FROM assignmentss');
+       const assignments = result.rows;
+       broadcast({ type: 'UPDATE_ASSIGNMENTS', assignments });
+       
+
       let id = a.rows[0].id;
        //now i will insert questions in the database
        inputFields.forEach( async (element) => {
