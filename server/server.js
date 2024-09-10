@@ -12,6 +12,11 @@ import Student from './Routes/student.js';
 import { WebSocketServer } from 'ws';
 import WebSocket from 'ws'; 
 
+//console.log(process.env);
+
+console.log('clientID:', process.env.clientID);
+console.log('clientSecret:', process.env.clientSecret);
+console.log('userProfileURL:', process.env.userProfileURL);
 
 const app = express();
 dotenv.config();
