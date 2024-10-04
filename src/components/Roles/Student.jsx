@@ -4,7 +4,7 @@ import studentImage from '../../assets/study.png';
 
 function Student() {
 
-    function getQuestions(id)
+    function startAssignmentPage(id)
     {
         console.log("assignment id ",id);
         navigate(`/schooler/student/assignment/${id}`);
@@ -98,7 +98,7 @@ function Student() {
                                     <td className='px-4 py-4 whitespace-nowrap'>{formatDate(assignment.deadline)}</td>
                                     <td className='px-4 py-4 whitespace-nowrap'>{`${assignment.time_limit_hours}:${assignment.time_limit_minutes}:${assignment.time_limit_seconds}`}</td>
                                     <td className='px-4 py-4 whitespace-nowrap'>
-                                        <button id={assignment.id} className='border-2 border-black p-2 hover:bg-black hover:text-white' onClick={() => getQuestions(assignment.id)}>Start</button>
+                                        <button id={assignment.id} className='border-2 border-black p-2 hover:bg-black hover:text-white' onClick={() => startAssignmentPage(assignment.id)}>Start</button>
                                     </td>
                                 </tr>
                             ))}

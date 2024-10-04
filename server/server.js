@@ -25,7 +25,7 @@ dotenv.config();
 app.use(session({
   secret: 'my name is arsh whats yours?',
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: true
 }));
 
 const db = new pg.Client({
