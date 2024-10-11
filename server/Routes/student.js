@@ -60,7 +60,50 @@ router.get('/getDetails',async (req,res)=>{
   //res.send({msg:"hello my name is Aryan Yadav"});
 })
 
+router.post('/submitTest',async (req,res)=>{
+    console.log("req body is ,",req.body);
+    let testData = req.body;
+    let assignmentId = testData.assignmentId;
+    let answers = testData.answers;
+    let questions = testData.questions;
+    let tab_switches = testData.tabSwitches;
+    let student_id = testData.studentId;
+   
+  //before anything make sure the assignment status is set to submitted
+    await db.query('UPDATE assignmentss SET status = $1 where id = $2',['submitted',assignmentId]);
 
+    //first of all we need to create need to make a new extry in the test relation returning the id
+    try{
+      let t = await db.query(
+        'INSERT INTO tests (assignment_id, tab_switches, student_id) VALUES ($1, $2, $3) RETURNING id',
+        [assignmentId, tab_switches, student_id]
+      );
+      let test_id = t.rows[0].id;
+        
+
+        //now we have to create a entry in the answers relation passing this test_id as the FK
+        try{
+           answers.map(async (element,index)=>{
+            await db.query(
+              'INSERT INTO answers (contents, test_id, question_id) VALUES ($1, $2, $3)',
+              [element, test_id, questions[index].id]
+            );
+            
+            })
+        }
+        catch(e)
+        {
+          console.log('smth happened with the answers relation ',e);
+          
+        }
+      }
+    catch(e)
+    {
+      console.log('smth happened with the test relation  ',e);
+      
+    }
+    res.sendStatus(200);
+})
 
 router.get('/getQuestions',async (req,res) =>{
  //now to send assignment details in the form a obj

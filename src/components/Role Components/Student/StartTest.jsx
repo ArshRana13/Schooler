@@ -1,6 +1,11 @@
 import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import JoditEditor from 'jodit-react';
+//import { error } from 'console';
+
+
+
+
 
 async function fetchQuestions(id) {
     let response = await fetch(`http://localhost:3000/schooler/student/getQuestions?id=${id}`);
@@ -9,7 +14,59 @@ async function fetchQuestions(id) {
 }
 
 function StartTest() {
+
+
+
+    const [studentId, setStudentId] = useState(0);
+    const [authenticated,setAuthenticated] = useState(false);
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const checkAuth = async () => {
+            try {
+                const response = await fetch('http://localhost:3000/schooler/home', {
+                    credentials: 'include'  // Include credentials for CORS
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.role === 'student') {
+                        console.log("data is ",data);
+                        
+                        setStudentId(data.student_id);
+                        setAuthenticated(true);
+                        
+                    } else {
+                        navigate('/login');
+                    }
+                } else {
+                    console.log(response)
+                    
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+                navigate('/login');
+            }
+        };
+
+        checkAuth();
+    }, [navigate]);
+
+
+
+
+
+
+
+
+
+
+
+
+
     const [title, setTitle] = useState('');
+    const [assignmentId, setAssignmentId] = useState(0);
     const [hours, setHours] = useState(0);
     const [mins, setMins] = useState(0);
     const [secs, setSecs] = useState(0);
@@ -18,7 +75,6 @@ function StartTest() {
     const [tabSwitches, setTabSwitches] = useState(0);
     const [isFullScreen, setIsFullScreen] = useState(true); // Assume fullscreen on load
     const [showFullScreenPrompt, setShowFullScreenPrompt] = useState(false); // Control the full-screen warning prompt
-    const navigate = useNavigate();
     let { id } = useParams();
 
     useEffect(() => {
@@ -31,6 +87,7 @@ function StartTest() {
                 setSecs(details.data.timeLimit.secs);
                 setQuestions(details.data.questions);
                 setResponses(new Array(details.data.questions.length).fill(''));
+                setAssignmentId(details.data.questions[0].assignment_id)
             } catch (error) {
                 console.error("Failed to fetch assignment details", error);
             }
@@ -44,7 +101,27 @@ function StartTest() {
         });
     }, [id]);
 
+
+    async function submitTest() {
+        let obj = {"answers": responses, "assignmentId": assignmentId, "questions": questions, "tabSwitches": tabSwitches, "studentId": studentId};
+         let response = await fetch(`http://localhost:3000/schooler/student/submitTest`,{headers: {"content-type": "application/json"},body:JSON.stringify(obj),method:"post"});
+        // console.log("object is ",obj);
+        if(response.ok)
+        {
+            navigate('/schooler/student/home');
+        }
+        console.log("submitted");
+        
+    }
+
+
+
+
+
+
     useEffect(() => {
+        console.log(responses);
+        
         const handleVisibilityChange = () => {
             if (document.visibilityState === 'hidden') {
                 setTabSwitches((prev) => prev + 1);
@@ -159,7 +236,7 @@ function StartTest() {
                 </div>
 
                 <div className='flex justify-center items-center'>
-                    <button className='bg-blue-500 text-white px-4 py-2 rounded'>Submit test</button>
+                    <button className='bg-blue-500 text-white px-4 py-2 rounded' onClick={submitTest}>Submit test</button>
                 </div>
             </div>
         </div>

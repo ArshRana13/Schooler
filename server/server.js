@@ -68,7 +68,7 @@ app.post('/login', (req, res) => {
 
 app.get("/schooler/home", (req, res) => {
   if (req.isAuthenticated())
-    return res.status(200).json({ role: req.user.role,group_student: req.user.group_student,assignments: req.user.assignments });
+    return res.status(200).json({ role: req.user.role,group_student: req.user.group_student,assignments: req.user.assignments, student_id: req.user.student_id });
   else
     return res.sendStatus(401);
 });
@@ -112,7 +112,7 @@ passport.use(
       // Database checking
       let admin = await db.query('SELECT id FROM admin WHERE name = $1', [profile.email]);
       let teacher = await db.query('SELECT id FROM teacher WHERE name = $1', [profile.email]);
-      let student = await db.query('SELECT group_student FROM student WHERE name = $1', [profile.email]);
+      let student = await db.query('SELECT id FROM student WHERE name = $1', [profile.email]);
 
       console.log(admin.rows);
       console.log(student.rows);
@@ -124,7 +124,9 @@ passport.use(
         return cb(null, profile);
       } else if (student.rows[0]) {
         profile.role = 'student';
-        profile.group_student = student.rows[0].group_student;
+        profile.student_id = student.rows[0].id;
+        let group = await db.query('SELECT group_student FROM student WHERE name = $1', [profile.email]);
+        profile.group_student = group.rows[0].group_student;
         let assignments = await db.query('SELECT * from assignmentss join student on student.group_student  = assignmentss.group_name where student.group_student = $1',[profile.group_student]);
         profile.assignments = assignments.rows;
         console.log(assignments.rows);
