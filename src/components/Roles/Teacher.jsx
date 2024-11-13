@@ -36,8 +36,9 @@ function Teacher() {
                       <div className='flex m-6 p-4 flex-col items-center justify-center'>
                         <img className='max-h-60 max-w-60' src={teacher} alt="" />
                         <span className='m-8 text-2xl text-center'>Welcome to Teachers page!</span>
-                        <div>
+                        <div className='flex p-8 m-8 gap-8'>
                             <Link to='/schooler/teacher/addAssignment' className='text-lg border-2 border-black p-2 text-center font-medium hover:bg-black hover:text-white'>➕Create Assignment</Link>
+                            <Link to="/schooler/teacher/allAssignments" className='text-lg border-2 border-black p-2 text-center font-medium hover:bg-black hover:text-white'>👁️All Assignments</Link>
                         </div>
                       </div>
                 </>

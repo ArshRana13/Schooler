@@ -14,6 +14,8 @@ import AddAssignment2 from "./components/Role Components/Teacher/AddAssignment2"
 import Student from "./components/Roles/Student";
 import StartAssignment from "./components/Role Components/Student/StartAssignment";
 import StartTest from "./components/Role Components/Student/StartTest";
+import FindAssignment from "./components/Role Components/Teacher/FindAssignment";
+import AllAssignments from "./components/Role Components/Teacher/AllAssignments";
 
 function App() {
   return (
@@ -31,7 +33,9 @@ function App() {
         <Route path="/schooler/student/home" element={<><AdminNavbar /><Student /></>}></Route>
         <Route path="schooler/student/assignment/:id" element={<> <StartAssignment/></>} />
         <Route path="schooler/student/assignment/start/:id" element={<> <StartTest/></>} />
-      
+        <Route path="schooler/teacher/allAssignments/evaluation/showAllAssignments/:id" element={<><FindAssignment/></>} />
+
+        <Route path="schooler/teacher/allAssignments" element={<><AllAssignments/></>}></Route>
       </Routes>
     </Router>
   );

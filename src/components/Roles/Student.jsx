@@ -87,7 +87,7 @@ function Student() {
                             <tr>
                                 <th className='px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider'>Title</th>
                                 <th className='px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider'>Deadline</th>
-                                <th className='px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider'>Duration</th>
+                                <th className='px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider'>Status</th>
                                 <th className='px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider'>Submit</th>
                             </tr>
                         </thead>
@@ -96,7 +96,11 @@ function Student() {
                                 <tr key={index}>
                                     <td className='px-4 py-4 whitespace-nowrap'>{assignment.title}</td>
                                     <td className='px-4 py-4 whitespace-nowrap'>{formatDate(assignment.deadline)}</td>
-                                    <td className='px-4 py-4 whitespace-nowrap'>{`${assignment.time_limit_hours}:${assignment.time_limit_minutes}:${assignment.time_limit_seconds}`}</td>
+                                    
+                                    {assignment.status == 'missed'? <td className='px-4 py-4 whitespace-nowrap bg-gray-200'>Missed</td> : assignment.status == 'pending'?<td className='px-4 py-4 whitespace-nowrap bg-blue-200'>Pending</td> : <td className='px-4 py-4 whitespace-nowrap bg-green-200'>Submitted</td> }
+                                    <td className='px-4 py-4 whitespace-nowrap'>{assignment.status}</td>
+                                    
+                                    
                                     <td className='px-4 py-4 whitespace-nowrap'>
                                         <button id={assignment.id} className='border-2 border-black p-2 hover:bg-black hover:text-white' onClick={() => startAssignmentPage(assignment.id)}>Start</button>
                                     </td>

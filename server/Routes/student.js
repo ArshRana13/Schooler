@@ -27,13 +27,33 @@ router.get('/getDetails',async (req,res)=>{
   try{
       let assData = await db.query('Select * from assignmentss where id = $1',[id]);
       //console.log(assData.rows);
+
+    //checking deadline
+    if(assData.rows[0].status == 'pending')
+    {
+      console.log('IM HERE');
+      
+      const dateNow = new Date();
+      console.log("date today ",dateNow);
+      
+      if(dateNow > new Date(assData.rows[0].deadline))
+      {
+        console.log('here too');
+        
+        await db.query('UPDATE assignmentss SET status = $1 WHERE id = $2',["missed",id]);
+        assData = await db.query('Select * from assignmentss where id = $1',[id]);
+
+      }
+    }
+
+
       obj.title = assData.rows[0].title;
       obj.description = assData.rows[0].description;
       obj.timeLimit = {hours: assData.rows[0].time_limit_hours,
                        mins: assData.rows[0].time_limit_minutes,
                        secs: assData.rows[0].time_limit_seconds}
       obj.deadline = assData.rows[0].deadline;
-
+      obj.status = assData.rows[0].status;
       let questionData  = await db.query('Select * from questions where assignment_id = $1',[id]);
 
       console.log("question data " ,questionData.rows);
@@ -57,7 +77,6 @@ router.get('/getDetails',async (req,res)=>{
     res.sendStatus(401);
     
   }
-  //res.send({msg:"hello my name is Aryan Yadav"});
 })
 
 router.post('/submitTest',async (req,res)=>{

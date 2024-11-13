@@ -26,7 +26,7 @@ function StartAssignment() {
     const [totalQ, setTotalQ] = useState(0);
     const [totalS, setTotalS] = useState(0);
     const [deadline, setDeadline] = useState('');
-
+    const [status, setStatus] = useState('pending');
     useEffect(() => {
         async function getDetails() {
             try {
@@ -39,6 +39,7 @@ function StartAssignment() {
                 setTotalQ(details.data.totalQuestions);
                 setTotalS(details.data.totalAnswers);
                 setDeadline(details.data.deadline);
+                setStatus(details.data.status);
             } catch (error) {
                 console.error("Failed to fetch assignment details", error);
             }
@@ -48,7 +49,13 @@ function StartAssignment() {
     }, [id]);
 
     const startTest = () => {
-        navigate(`/schooler/student/assignment/start/${id}`);
+        if(status == 'pending')
+            navigate(`/schooler/student/assignment/start/${id}`);
+        if(status == 'submitted')
+            alert('Test already submitted!');
+        if(status == 'missed')
+            alert('You missed this test!');
+
     };
 
     return (

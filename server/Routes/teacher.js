@@ -65,3 +65,51 @@ router.post('/addAssignment',async (req,res)=>{
   // }
 })
 export default router;
+
+
+router.get('/getTests',async (req,res) =>{
+  let id = req.query.id;
+  console.log('id is ',id);
+  try{
+    let result = await db.query('SELECT * FROM tests WHERE assignment_id = $1 AND evaluated = false', [id]);
+    if(result.rows.length > 0)
+    {
+      res.send({tests: result.rows});
+    }
+    else{
+      res.send({msg:"empty"})
+    }
+  }
+  catch(e){
+    console.log('error in tests ',e);
+    
+  }
+  
+})
+
+
+router.get('/getTitle',async (req,res)=>{
+  try{
+    let assignment = await db.query('Select title from assignmentss where id = $1',[req.query.id])
+    res.send({"title":assignment.rows[0].title});
+  }
+  catch(e)
+  {
+    console.log('error in assinmentss relation ',e);
+    
+  }
+})
+/*
+plan for evaluating the assignments 
+1. Web sockets so that when the student submits the assignment it is being displaued to the teacher via web sockets.
+2. Teacher home page will have two segments => 
+      i. create assignments(done)
+      ii. Evaluate assignments(to be done)
+3. The Evaluate assignment page will have structure like this
+    - Each answer will be displayed with the answer submitted by the student.
+    = Each question will have the max score next to it and a input box where the teacher will give max obtained by the student.
+    - There will also be a AI button that will evaluate the question with the answer provided by the student and will fill the score input box.
+    -(summary) => teacher will have control of which question to check manually and which question to be checked by the AI.
+    -when the teacher clicks on Submit evaluation the marks are displayed to the student.
+    - the ID of the student is not displayed to the teacher. 
+*/
